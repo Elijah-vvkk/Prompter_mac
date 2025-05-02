@@ -8,8 +8,7 @@
     "dev": "cross-env NODE_ENV=development electron .",
     "build": "node scripts/build.js",
     "build-icons": "node scripts/build-icons.js",
-    "postinstall": "electron-builder install-app-deps",
-    "release": "npm version patch && git push --follow-tags"
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "Your Name",
   "license": "MIT",
@@ -33,6 +32,10 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "build/logo.ico"
     },
     "files": [
       "src/**/*",

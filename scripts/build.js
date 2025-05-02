@@ -36,7 +36,7 @@ execSync('npm run build-icons', { stdio: 'inherit' });
 
 // 构建应用
 console.log('正在构建应用...');
-execSync('electron-builder --mac', { stdio: 'inherit' });
+execSync('electron-builder', { stdio: 'inherit' });
 
 // 检查构建结果
 if (fs.existsSync('dist')) {

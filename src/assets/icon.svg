@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1024" height="1024" fill="#4A90E2" rx="200" ry="200"/>
-  <text x="512" y="512" font-family="Arial" font-size="400" fill="white" text-anchor="middle" dominant-baseline="middle">P</text>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="512" cy="512" r="512" fill="#4285F4"/>
+  
+  <!-- 文档图标 -->
+  <path d="M320 256H704C736 256 768 288 768 320V704C768 736 736 768 704 768H320C288 768 256 736 256 704V320C256 288 288 256 320 256Z" fill="white"/>
+  
+  <!-- 文档内容 -->
+  <path d="M384 384H640M384 448H640M384 512H512" stroke="#4285F4" stroke-width="32" stroke-linecap="round"/>
+  
+  <!-- 装饰元素 -->
+  <circle cx="512" cy="512" r="384" stroke="white" stroke-width="32" stroke-opacity="0.2"/>
+  <circle cx="512" cy="512" r="256" stroke="white" stroke-width="32" stroke-opacity="0.1"/>
 </svg> 

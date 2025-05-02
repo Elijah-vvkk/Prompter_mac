@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>Prompter</title>
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- 应用容器 -->
+  <div class="app-container">
+    <!-- 顶部区域 -->
+    <header class="app-header">
+      <div class="window-controls">
+        <button id="minimizeBtn" class="window-control-btn">
+          <svg width="12" height="12" viewBox="0 0 12 12">
+            <path d="M2 6H10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button id="closeBtn" class="window-control-btn">
+          <svg width="12" height="12" viewBox="0 0 12 12">
+            <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="header-actions">
+        <button id="addTemplateBtn" class="action-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          添加模板
+        </button>
+        <button id="addCategoryBtn" class="action-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          创建分类
+        </button>
+      </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="app-main">
+      <!-- 侧边栏 -->
+      <aside class="app-sidebar">
+        <div class="sidebar-header">
+          <button id="settingsBtn" class="sidebar-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <path d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M13.5 8C13.5 8 12.5 10 10 10C7.5 10 6.5 8 6.5 8C6.5 8 7.5 6 10 6C12.5 6 13.5 8 13.5 8Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            设置
+          </button>
+          <button id="batchSelectBtn" class="sidebar-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <path d="M3 8H13M3 4H13M3 12H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            批量选择
+          </button>
+          <button id="deleteBtn" class="sidebar-btn" disabled>
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <path d="M3 4H13M5 4V3C5 2.44772 5.44772 2 6 2H10C10.5523 2 11 2.44772 11 3V4M12 4V13C12 13.5523 11.5523 14 11 14H5C4.44772 14 4 13.5523 4 13V4H12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            删除
+          </button>
+        </div>
+        <div class="category-list-container">
+          <h3 class="category-list-title">分类</h3>
+          <ul id="categoryList" class="category-list">
+            <li class="category-list-item category-list-item-empty">暂无分类</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- 模板列表 -->
+      <section class="template-list-container">
+        <h3 class="template-list-title">模板</h3>
+        <ul id="templateList" class="template-list">
+          <li class="template-list-item template-list-item-empty">暂无模板</li>
+        </ul>
+      </section>
+
+      <!-- 模板内容 -->
+      <section class="template-content-container">
+        <div id="templateContent" class="template-content">
+          <div class="template-content-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+              <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V18M8 5C8 6.10457 8.89543 7 10 7H12C13.1046 7 14 6.10457 14 5M8 5C8 3.89543 8.89543 3 10 3H12C13.1046 3 14 3.89543 14 5M14 5H16C17.1046 5 18 5.89543 18 7V11M20 14H10M10 14L13 11M10 14L13 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>选择一个模板查看内容</p>
+          </div>
+        </div>
+        <div class="template-actions">
+          <textarea id="templateEditContent" class="template-edit-content" placeholder="在此编辑模板内容..."></textarea>
+          <div class="template-action-buttons">
+            <button id="saveTemplateEditBtn" class="action-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16">
+                <path d="M13 3L3 13M3 3L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              保存
+            </button>
+            <button id="copyBtn" class="action-btn" disabled>
+              <svg width="16" height="16" viewBox="0 0 16 16">
+                <path d="M4 4V14H14V4H4ZM3 3H15V15H3V3ZM6 6H12V7H6V6ZM6 8H12V9H6V8ZM6 10H9V11H6V10Z" fill="currentColor"/>
+              </svg>
+              复制
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 模态框容器 -->
+  <div id="modalContainer" class="modal-container hidden">
+    <!-- 模板模态框 -->
+    <div id="templateModal" class="modal hidden">
+      <div class="modal-header">
+        <h3 id="templateModalTitle" class="modal-title">添加模板</h3>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <form id="templateForm" class="modal-form">
+        <input type="hidden" name="templateId">
+        <div class="form-group">
+          <label for="templateTitle">标题</label>
+          <input type="text" id="templateTitle" name="templateTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="templateCategory">分类</label>
+          <input type="text" id="templateCategory" name="templateCategory" required>
+        </div>
+        <div class="form-group">
+          <label for="templateContentInput">内容</label>
+          <textarea id="templateContentInput" name="templateContentInput" required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" data-modal-close>取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 分类模态框 -->
+    <div id="categoryModal" class="modal hidden">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle" class="modal-title">创建分类</h3>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <form id="categoryForm" class="modal-form">
+        <div class="form-group">
+          <label for="categoryName">分类名称</label>
+          <input type="text" id="categoryName" name="categoryName" required>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" data-modal-close>取消</button>
+          <button type="submit" class="btn btn-primary">创建</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div id="settingsModal" class="modal hidden">
+      <div class="modal-header">
+        <h3 class="modal-title">设置</h3>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <div class="settings-group">
+          <label class="settings-label">
+            <span>开机自启动</span>
+            <input type="checkbox" id="autoStartSwitch" class="settings-switch">
+          </label>
+        </div>
+        <div class="settings-group">
+          <label class="settings-label">
+            <span>快捷键</span>
+            <input type="text" id="hotkeyInput" class="settings-input" readonly>
+          </label>
+        </div>
+        <div class="settings-group">
+          <div class="settings-label">
+            <span>导入模板</span>
+            <div id="importDropzone" class="import-dropzone">
+              <p>拖放 JSON 文件到此处或</p>
+              <button id="selectFileBtn" class="btn btn-secondary">选择文件</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 确认模态框 -->
+    <div id="confirmModal" class="modal hidden">
+      <div class="modal-header">
+        <h3 id="confirmTitle" class="modal-title">确认</h3>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <p id="confirmMessage" class="confirm-message"></p>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" data-modal-close>取消</button>
+          <button type="button" id="confirmBtn" class="btn btn-danger">确认</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 快捷键冲突模态框 -->
+    <div id="hotkeyConflictModal" class="modal hidden">
+      <div class="modal-header">
+        <h3 class="modal-title">快捷键冲突</h3>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <p class="confirm-message">该快捷键已被其他应用占用，请选择其他快捷键。</p>
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" data-modal-close>确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="index.js"></script>
+</body>
+</html> 

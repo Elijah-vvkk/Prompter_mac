@@ -11,11 +11,11 @@ const colors = {
 
 // 检查是否安装了必要的工具
 try {
-    execSync('convert --version', { stdio: 'ignore' });
+    execSync('magick --version', { stdio: 'ignore' });
 } catch (error) {
     console.error(`${colors.red}错误: 未找到 ImageMagick，请先安装它${colors.reset}`);
-    console.log('在 macOS 上，您可以使用 Homebrew 安装:');
-    console.log('brew install imagemagick');
+    console.log('在 Windows 上，您可以从以下地址下载安装：');
+    console.log('https://imagemagick.org/script/download.php#windows');
     process.exit(1);
 }
 
@@ -33,7 +33,7 @@ const LOGO_ICON = 'src/assets/logo.svg';
 console.log('正在生成应用图标...');
 const sizes = [16, 32, 64, 128, 256, 512, 1024];
 sizes.forEach(size => {
-    execSync(`convert -background none -size ${size}x${size} "${APP_ICON}" "build/icon_${size}.png"`, { stdio: 'inherit' });
+    execSync(`magick "${APP_ICON}" -background none -size ${size}x${size} "build/icon_${size}.png"`, { stdio: 'inherit' });
 });
 
 // 生成 ICNS 文件
@@ -62,13 +62,17 @@ iconMappings.forEach(([src, dest]) => {
 });
 
 // 生成 ICNS 文件
-execSync(`iconutil -c icns "${iconsetDir}" -o "build/icon.icns"`, { stdio: 'inherit' });
+if (process.platform === 'darwin') {
+    execSync(`iconutil -c icns "${iconsetDir}" -o "build/icon.icns"`, { stdio: 'inherit' });
+} else {
+    console.log('跳过 ICNS 文件生成（仅支持 macOS）');
+}
 fs.rmSync(iconsetDir, { recursive: true, force: true });
 
 // 生成托盘图标
 console.log('正在生成托盘图标...');
-execSync(`convert -background none -size 16x16 "${TRAY_ICON}" "build/tray.png"`, { stdio: 'inherit' });
-execSync(`convert -background none -size 32x32 "${TRAY_ICON}" "build/tray@2x.png"`, { stdio: 'inherit' });
+execSync(`magick "${TRAY_ICON}" -background none -size 16x16 "build/tray.png"`, { stdio: 'inherit' });
+execSync(`magick "${TRAY_ICON}" -background none -size 32x32 "build/tray@2x.png"`, { stdio: 'inherit' });
 
 // 复制 logo 文件
 console.log('正在复制 logo 文件...');
