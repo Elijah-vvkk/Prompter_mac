@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
 
+# 添加权限配置
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -19,19 +24,32 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
           
       - name: Install ImageMagick
         run: |
           brew install imagemagick
           
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
         
       - name: Build Icons
         run: npm run build-icons
         
       - name: Build App
-        run: npm run build
+        run: |
+          npm run build || {
+            echo "Build failed"
+            exit 1
+          }
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -41,5 +59,8 @@ jobs:
           files: |
             dist/*.dmg
             dist/*.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
